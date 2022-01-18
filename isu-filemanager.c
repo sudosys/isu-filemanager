@@ -58,6 +58,8 @@ void split_run_command(char* command) {
         move_file(command_pieces[1],command_pieces[2]);
     } else if (strcmp(command_pieces[0], "append") == 0) {
         append_file(command_pieces[1]);
+    } else if (strcmp(command_pieces[0], "clear") == 0) {
+        clear_file(command_pieces[1]);
     } else { 
         printf("Erroneous input! Type 'help' for list of commands.\n\n");
         prompt();
@@ -135,7 +137,11 @@ void copy_file(const char* file_name, const char* copied_file_name) {
         fputc(ch, copy_file);
     }
 
+    fclose(file);
+
     printf("File copied successfully!\n\n");
+
+    prompt();
 }
 
 void move_file(const char* file_name, const char* destination) {
@@ -178,10 +184,28 @@ void append_file(const char* file_name) {
 
     }
 
+    fputs("\n", file);
+
     fclose(file);
 
     printf("Append to file is successful!\n\n");
 
     prompt();
+
+}
+
+void clear_file(const char* file_name) {
+
+    file = fopen(file_name, "w");
+
+    if (file == NULL) {
+        fprintf(stderr, "Error occured while trying to clear the content of the file!\n\n");
+    } else {
+        printf("File content cleared successfully!\n\n");
+    }
+
+    prompt();
+
+    fclose(file);
 
 }
