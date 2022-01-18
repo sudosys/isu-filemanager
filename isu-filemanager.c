@@ -4,6 +4,7 @@
 #include <string.h>
 
 #define MAX_COMMAND_LENGTH 512
+#define MAX_APPEND_TEXT_LENGTH 256
 
 FILE* file;
 
@@ -22,6 +23,8 @@ void prompt() {
     printf("ISU File Manager #> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
+    command[strcspn(command, "\n")] = 0;
+
     split_run_command(command);
 
 }
@@ -30,7 +33,7 @@ void split_run_command(char* command) {
 
     char* token = strtok(command, " ");
     int command_index = 0;
-    char* command_pieces[3];
+    const char* command_pieces[3];
 
     while (token != NULL) {
 
@@ -40,6 +43,8 @@ void split_run_command(char* command) {
         command_index++;
 
     }
+
+    if (strcmp(command_pieces[0], "exit") == 0) { exit(EXIT_SUCCESS); }
 
     if (strcmp(command_pieces[0], "create") == 0) {
         create_file(command_pieces[1]);
@@ -51,13 +56,13 @@ void split_run_command(char* command) {
         copy_file(command_pieces[1],command_pieces[2]);
     } else if (strcmp(command_pieces[0], "move") == 0) {
         move_file(command_pieces[1],command_pieces[2]);
+    } else if (strcmp(command_pieces[0], "append") == 0) {
+        append_file(command_pieces[1]);
     }
 
 }
 
-void create_file(char* file_name) {
-
-    file_name[strcspn(file_name, "\n")] = 0;
+void create_file(const char* file_name) {
     
     file = fopen(file_name, "r");
 
@@ -80,9 +85,7 @@ void create_file(char* file_name) {
 
 }
 
-void delete_file(char* file_name) {
-
-    file_name[strcspn(file_name, "\n")] = 0;
+void delete_file(const char* file_name) {
 
     if (remove(file_name) == 0) {
         printf("File deleted successfully!\n\n");
@@ -94,9 +97,7 @@ void delete_file(char* file_name) {
 
 }
 
-void rename_file(char* old_file_name, char* new_file_name) {
-
-    new_file_name[strcspn(new_file_name, "\n")] = 0;
+void rename_file(const char* old_file_name, const char* new_file_name) {
 
     if (rename(old_file_name, new_file_name) == 0) {
         printf("File renamed successfully!\n\n");
@@ -108,9 +109,7 @@ void rename_file(char* old_file_name, char* new_file_name) {
 
 }
 
-void copy_file(char* file_name, char* copied_file_name) {
-    
-    copied_file_name[strcspn(copied_file_name, "\n")] = 0;
+void copy_file(const char* file_name, const char* copied_file_name) {
 
     char ch;
     FILE* copy_file;
@@ -136,15 +135,45 @@ void copy_file(char* file_name, char* copied_file_name) {
     printf("File copied successfully!\n\n");
 }
 
-void move_file(char* file_name, char* destination) {
-
-    destination[strcspn(destination, "\n")] = 0;
+void move_file(const char* file_name, const char* destination) {
 
     if (rename(file_name, destination) == 0) {
         printf("File moved successfully!\n\n");
     } else {
         fprintf(stderr, "An error occured while moving the file!\n\n");
     }
+
+    prompt();
+
+}
+
+void append_file(const char* file_name) {
+    
+    char text_to_append[MAX_APPEND_TEXT_LENGTH];
+    char* token;
+
+    file = fopen(file_name, "a");
+
+    if (file == NULL) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
+
+    printf("Enter the text to append: ");
+    scanf("%[^\n]s", text_to_append);
+
+    token = strtok(text_to_append, " ");
+
+    while (token != NULL) {
+
+        fputs(token, file);
+        fputs(" ", file);
+
+        token = strtok(NULL, " ");
+
+    }
+
+    fclose(file);
 
     prompt();
 
