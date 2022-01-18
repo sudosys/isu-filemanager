@@ -2,8 +2,8 @@
 #define ISUFILEMANAGER_H
 
 void main_menu();
-void create_file(const char* file_name);
-void delete_file(const char* file_name);
-void rename_file(const char* file_name);
+void create_file();
+void delete_file();
+void rename_file();
 
 #endif
