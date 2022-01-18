@@ -9,20 +9,17 @@ FILE* file;
 
 int main() {
 
-    main_menu();
+    prompt();
 
     return 0;
 }
 
-void main_menu() {
+void prompt() {
 
     char command[MAX_COMMAND_LENGTH];
-    
-    printf("#######################\n");
-    printf("###ISU File Manager####\n");
-    printf("#######################\n\n");
+    fgets(command, MAX_COMMAND_LENGTH, '\0');
 
-    printf("Enter desired command with respective parameters: ");
+    printf("ISU File Manager #> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
     split_run_command(command);
@@ -33,7 +30,7 @@ void split_run_command(char* command) {
 
     char* token = strtok(command, " ");
     int command_index = 0;
-    char* command_pieces[3] = {'\0','\0','\0'};
+    char* command_pieces[3];
 
     while (token != NULL) {
 
@@ -52,6 +49,8 @@ void split_run_command(char* command) {
         rename_file(command_pieces[1],command_pieces[2]);
     } else if (strcmp(command_pieces[0], "copy") == 0) {
         copy_file(command_pieces[1],command_pieces[2]);
+    } else if (strcmp(command_pieces[0], "move") == 0) {
+        move_file(command_pieces[1],command_pieces[2]);
     }
 
 }
@@ -59,26 +58,25 @@ void split_run_command(char* command) {
 void create_file(char* file_name) {
 
     file_name[strcspn(file_name, "\n")] = 0;
-
-    printf("%s", file_name);
     
     file = fopen(file_name, "r");
 
     if (file != NULL) {
         fprintf(stderr, "File already exists!\n\n");
+        prompt();
     }
     
     file = fopen(file_name, "w");
 
     if (file != NULL) {
         printf("File created successfully!\n\n");
+        prompt();
     } else {
         fprintf(stderr, "An error occured while creating the file!\n\n");
+        prompt();
     }
 
     fclose(file);
-
-    main_menu();
 
 }
 
@@ -92,7 +90,7 @@ void delete_file(char* file_name) {
         fprintf(stderr, "An error occured while deleting the file!\n\n");
     }
 
-    main_menu();
+    prompt();
 
 }
 
@@ -106,7 +104,7 @@ void rename_file(char* old_file_name, char* new_file_name) {
         fprintf(stderr, "An error occured while renaming the file!\n\n");
     }
 
-    main_menu();
+    prompt();
 
 }
 
@@ -121,14 +119,14 @@ void copy_file(char* file_name, char* copied_file_name) {
 
     if (file == NULL) {
         fprintf(stderr, "File does not exist!\n\n");
-        main_menu();
+        prompt();
     }
 
     copy_file = fopen(copied_file_name, "w");
 
     if (copy_file == NULL) {
         fprintf(stderr, "Copy file can't be created!\n\n");
-        main_menu();
+        prompt();
     }
 
     while ((ch = fgetc(file)) != EOF) {
@@ -136,4 +134,18 @@ void copy_file(char* file_name, char* copied_file_name) {
     }
 
     printf("File copied successfully!\n\n");
+}
+
+void move_file(char* file_name, char* destination) {
+
+    destination[strcspn(destination, "\n")] = 0;
+
+    if (rename(file_name, destination) == 0) {
+        printf("File moved successfully!\n\n");
+    } else {
+        fprintf(stderr, "An error occured while moving the file!\n\n");
+    }
+
+    prompt();
+
 }
