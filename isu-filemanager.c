@@ -20,7 +20,7 @@ void prompt() {
     char command[MAX_COMMAND_LENGTH];
     fgets(command, MAX_COMMAND_LENGTH, '\0');
 
-    printf("ISU File Manager #> ");
+    printf("ISU File Manager $> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
     command[strcspn(command, "\n")] = 0;
@@ -58,6 +58,9 @@ void split_run_command(char* command) {
         move_file(command_pieces[1],command_pieces[2]);
     } else if (strcmp(command_pieces[0], "append") == 0) {
         append_file(command_pieces[1]);
+    } else { 
+        printf("Erroneous input! Type 'help' for list of commands.\n\n");
+        prompt();
     }
 
 }
@@ -160,7 +163,9 @@ void append_file(const char* file_name) {
     }
 
     printf("Enter the text to append: ");
-    scanf("%[^\n]s", text_to_append);
+    fgets(text_to_append, MAX_APPEND_TEXT_LENGTH, stdin);
+
+    text_to_append[strcspn(text_to_append, "\n")] = 0;
 
     token = strtok(text_to_append, " ");
 
@@ -174,6 +179,8 @@ void append_file(const char* file_name) {
     }
 
     fclose(file);
+
+    printf("Append to file is successful!\n\n");
 
     prompt();
 
