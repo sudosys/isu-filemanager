@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define MAX_COMMAND_LENGTH 512
-#define MAX_APPEND_TEXT_LENGTH 256
+#define MAX_TEXT_LENGTH 256
 
 FILE* file;
 
@@ -18,8 +18,7 @@ int main() {
 void prompt() {
 
     char command[MAX_COMMAND_LENGTH];
-    fgets(command, MAX_COMMAND_LENGTH, '\0');
-
+    
     printf("ISU File Manager $> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
@@ -58,6 +57,8 @@ void split_run_command(char* command) {
         move_file(command_pieces[1],command_pieces[2]);
     } else if (strcmp(command_pieces[0], "append") == 0) {
         append_file(command_pieces[1]);
+    } else if (strcmp(command_pieces[0], "insert") == 0) {
+        insert_file(command_pieces[1], atoi(command_pieces[2]));
     } else if (strcmp(command_pieces[0], "clear") == 0) {
         clear_file(command_pieces[1]);
     } else { 
@@ -138,6 +139,7 @@ void copy_file(const char* file_name, const char* copied_file_name) {
     }
 
     fclose(file);
+    fclose(copy_file);
 
     printf("File copied successfully!\n\n");
 
@@ -158,7 +160,7 @@ void move_file(const char* file_name, const char* destination) {
 
 void append_file(const char* file_name) {
     
-    char text_to_append[MAX_APPEND_TEXT_LENGTH];
+    char text_to_append[MAX_TEXT_LENGTH];
     char* token;
 
     file = fopen(file_name, "a");
@@ -169,7 +171,7 @@ void append_file(const char* file_name) {
     }
 
     printf("Enter the text to append: ");
-    fgets(text_to_append, MAX_APPEND_TEXT_LENGTH, stdin);
+    fgets(text_to_append, MAX_TEXT_LENGTH, stdin);
 
     text_to_append[strcspn(text_to_append, "\n")] = 0;
 
@@ -191,6 +193,49 @@ void append_file(const char* file_name) {
     printf("Append to file is successful!\n\n");
 
     prompt();
+
+}
+
+void insert_file(const char* file_name, int insertion_pos) {
+
+    char text_to_insert[MAX_TEXT_LENGTH];
+    char text_before_insertion_pos[insertion_pos+1];
+    char text_after_insertion_pos[MAX_TEXT_LENGTH];
+    char ch;
+    int pos_index = 0;
+    int after_index = 0;
+
+    file = fopen(file_name, "r");
+
+    printf("Enter the text to insert: ");
+    fgets(text_to_insert, MAX_TEXT_LENGTH, stdin);
+
+    text_to_insert[strcspn(text_to_insert, "\n")] = 0;
+
+    while (pos_index < insertion_pos) {
+
+        ch = fgetc(file);
+
+        text_before_insertion_pos[pos_index] = ch;
+
+        pos_index++;
+    }
+
+    while ((ch = fgetc(file)) != EOF) {
+
+        text_after_insertion_pos[after_index] = ch;
+
+        after_index++;
+
+    }
+    
+    file = fopen(file_name, "w");
+
+    fputs(text_before_insertion_pos, file);
+    fputs(text_to_insert, file);
+    fputs(text_after_insertion_pos, file);
+
+    fclose(file);
 
 }
 
