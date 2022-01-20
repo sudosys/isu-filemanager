@@ -248,11 +248,11 @@ void insert_file(const char* file_name, int insertion_pos) {
     fputs(text_to_insert, file);
     fputs(text_after_insertion_pos, file);
 
-    // fclose(file); // causes double free error in Linux
+    fclose(file);
 
     printf("Text inserted into specified position in the file successfully!\n\n");
 
-    // prompt(); // Causes file to be cleared
+    prompt();
 
 }
 
