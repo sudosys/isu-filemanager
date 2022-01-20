@@ -205,7 +205,15 @@ void insert_file(const char* file_name, int insertion_pos) {
     int pos_index = 0;
     int after_index = 0;
 
+    for (int i = 0; i < insertion_pos+1; i++) { text_before_insertion_pos[i] = '\0'; }
+    for (int i = 0; i < MAX_TEXT_LENGTH; i++) { text_after_insertion_pos[i] = '\0'; }
+
     file = fopen(file_name, "r");
+
+    if (file == NULL) {
+        fprintf(stderr, "File could not be opened!");
+        prompt();
+    }
 
     printf("Enter the text to insert: ");
     fgets(text_to_insert, MAX_TEXT_LENGTH, stdin);
@@ -231,11 +239,20 @@ void insert_file(const char* file_name, int insertion_pos) {
     
     file = fopen(file_name, "w");
 
+    if (file == NULL) {
+        fprintf(stderr, "File could not be opened!"); 
+        prompt();
+    }
+
     fputs(text_before_insertion_pos, file);
     fputs(text_to_insert, file);
     fputs(text_after_insertion_pos, file);
 
-    fclose(file);
+    // fclose(file); // causes double free error in Linux
+
+    printf("Text inserted into specified position in the file successfully!\n\n");
+
+    // prompt(); // Causes file to be cleared
 
 }
 
