@@ -46,23 +46,59 @@ void split_run_command(char* command) {
     if (strcmp(command_pieces[0], "exit") == 0) { exit(EXIT_SUCCESS); }
 
     if (strcmp(command_pieces[0], "create") == 0) {
-        create_file(command_pieces[1]);
+        if (strcmp(command_pieces[1], "/h") == 0) {
+            printf("It creates the file.\nUsage: create <file_name>");
+        }
+        else{ create_file(command_pieces[1]);}
+
     } else if (strcmp(command_pieces[0], "delete") == 0) {
-        delete_file(command_pieces[1]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It deletes the file.\nUsage: delete <file_name>");
+        }
+        else{ delete_file(command_pieces[1]);}
+
     } else if (strcmp(command_pieces[0], "rename") == 0) {
-        rename_file(command_pieces[1],command_pieces[2]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It renames the file.\nUsage: rename <file_name>");
+        }
+        else{ rename_file(command_pieces[1], command_pieces[2]);}
+
     } else if (strcmp(command_pieces[0], "copy") == 0) {
-        copy_file(command_pieces[1],command_pieces[2]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It copies the file.\nUsage: copy <file_name>");
+        }
+        else{ copy_file(command_pieces[1], command_pieces[2]);}
+
     } else if (strcmp(command_pieces[0], "move") == 0) {
-        move_file(command_pieces[1],command_pieces[2]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It moves the file.\nUsage: move <file_name>");
+        }
+        else{ delete_file(command_pieces[1]);}
+
     } else if (strcmp(command_pieces[0], "append") == 0) {
-        append_file(command_pieces[1]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It appends text into the file.\nUsage: append <file_name>");
+        }
+        else{ append_file(command_pieces[1]);}
+
     } else if (strcmp(command_pieces[0], "insert") == 0) {
-        insert_file(command_pieces[1], atoi(command_pieces[2]));
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It inserts the text into the file.\nUsage: insert <file_name>");
+        }
+        else{ insert_file(command_pieces[1], atoi(command_pieces[2]));}
+
     } else if (strcmp(command_pieces[0], "clear") == 0) {
-        clear_file(command_pieces[1]);
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It clears the file.\nUsage: clear <file_name>");
+        }
+        else{ clear_file(command_pieces[1]);}
+
     } else if (strcmp(command_pieces[0], "scroll") == 0) {
-        scroll_file(command_pieces[1], atoi(command_pieces[2]));
+        if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It scrolls the file according to the entered values.\nUsage: scroll <file_name>");
+        }
+        else{ scroll_file(command_pieces[1], atoi(command_pieces[2]));}
+
     } else {
         printf("Erroneous input! Type 'help' for list of commands.\n\n");
         prompt();
@@ -295,10 +331,14 @@ void scroll_file(const char* file_name, int row_count){
             printf("%s", array);
             row_index++;
     }
-
+    printf("\n");
     prompt();
 
     fclose(file);
 
-
 }
+
+
+
+
+
