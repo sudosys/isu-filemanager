@@ -18,7 +18,7 @@ int main() {
 void prompt() {
 
     char command[MAX_COMMAND_LENGTH];
-    
+
     printf("ISU File Manager $> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
@@ -61,7 +61,9 @@ void split_run_command(char* command) {
         insert_file(command_pieces[1], atoi(command_pieces[2]));
     } else if (strcmp(command_pieces[0], "clear") == 0) {
         clear_file(command_pieces[1]);
-    } else { 
+    } else if (strcmp(command_pieces[0], "scroll") == 0) {
+        scroll_file(command_pieces[1], atoi(command_pieces[2]));
+    } else {
         printf("Erroneous input! Type 'help' for list of commands.\n\n");
         prompt();
     }
@@ -69,14 +71,14 @@ void split_run_command(char* command) {
 }
 
 void create_file(const char* file_name) {
-    
+
     file = fopen(file_name, "r");
 
     if (file != NULL) {
         fprintf(stderr, "File already exists!\n\n");
         prompt();
     }
-    
+
     file = fopen(file_name, "w");
 
     if (file != NULL) {
@@ -159,7 +161,7 @@ void move_file(const char* file_name, const char* destination) {
 }
 
 void append_file(const char* file_name) {
-    
+
     char text_to_append[MAX_TEXT_LENGTH];
     char* token;
 
@@ -236,11 +238,11 @@ void insert_file(const char* file_name, int insertion_pos) {
         after_index++;
 
     }
-    
+
     file = fopen(file_name, "w");
 
     if (file == NULL) {
-        fprintf(stderr, "File could not be opened!"); 
+        fprintf(stderr, "File could not be opened!");
         prompt();
     }
 
@@ -253,6 +255,7 @@ void insert_file(const char* file_name, int insertion_pos) {
     printf("Text inserted into specified position in the file successfully!\n\n");
 
     prompt();
+
 
 }
 
@@ -269,5 +272,33 @@ void clear_file(const char* file_name) {
     prompt();
 
     fclose(file);
+
+}
+
+void scroll_file(const char* file_name, int row_count){
+
+    int row_index=0;
+
+    char array[MAX_TEXT_LENGTH];
+
+    file = fopen(file_name, "r");
+
+    if (file == NULL) {
+        fprintf(stderr, "Error occured while trying to scroll the content of the file!\n\n");
+    }
+
+    while(fgets (array, MAX_TEXT_LENGTH, file) !=NULL){
+            if(row_index==row_count){
+                row_index=0;
+                getchar();
+            }
+            printf("%s", array);
+            row_index++;
+    }
+
+    prompt();
+
+    fclose(file);
+
 
 }

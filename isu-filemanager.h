@@ -11,5 +11,5 @@ void move_file(const char* file_name, const char* destination);
 void append_file(const char* file_name);
 void insert_file(const char* file_name, int insertion_pos);
 void clear_file(const char* file_name);
-
+void scroll_file(const char* file_name, int row_count);
 #endif
