@@ -46,61 +46,70 @@ void split_run_command(char* command) {
     if (strcmp(command_pieces[0], "exit") == 0) { exit(EXIT_SUCCESS); }
 
     if (strcmp(command_pieces[0], "create") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0) {
-            printf("It creates the file.\nUsage: create <file_name>");
-        }
-        else{ create_file(command_pieces[1]);}
+            printf("It creates the file.\nUsage: create <file_name>\n\n");
+            prompt();
+        } else { create_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "delete") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It deletes the file.\nUsage: delete <file_name>");
-        }
-        else{ delete_file(command_pieces[1]);}
+            printf("It deletes the file.\nUsage: delete <file_name>\n\n");
+            prompt();
+        } else { delete_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "rename") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It renames the file.\nUsage: rename <file_name>");
-        }
-        else{ rename_file(command_pieces[1], command_pieces[2]);}
+            printf("It renames the file.\nUsage: rename <old_file_name> <new_file_name>\n\n");
+            prompt();
+        } else { rename_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "copy") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It copies the file.\nUsage: copy <file_name>");
-        }
-        else{ copy_file(command_pieces[1], command_pieces[2]);}
+            printf("It copies the file.\nUsage: copy <file_name> <copied_file_name (along with the directory if it going to be copied to somewhere else.)>\n\n");
+            prompt();
+        } else { copy_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "move") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It moves the file.\nUsage: move <file_name>");
-        }
-        else{ delete_file(command_pieces[1]);}
+            printf("It moves the file.\nUsage: move <file_name> <destination_path>\n\n");
+            prompt();
+        } else { delete_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "append") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It appends text into the file.\nUsage: append <file_name>");
-        }
-        else{ append_file(command_pieces[1]);}
+            printf("It appends text into the file.\nUsage: append <file_name>\nAfter <enter> has pressed user should input the text that is going to be appended to the file.\n\n");
+            prompt();
+        } else { append_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "insert") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It inserts the text into the file.\nUsage: insert <file_name>");
-        }
-        else{ insert_file(command_pieces[1], atoi(command_pieces[2]));}
+            printf("It inserts the text into the file.\nUsage: insert <file_name> <which_point_to_insert (as number of characters starting from 1.)>\n\n");
+            prompt();
+        } else { insert_file(command_pieces[1], atoi(command_pieces[2])); }
 
     } else if (strcmp(command_pieces[0], "clear") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It clears the file.\nUsage: clear <file_name>");
-        }
-        else{ clear_file(command_pieces[1]);}
+            printf("It deletes all the content in the file.\nUsage: clear <file_name>\n\n");
+            prompt();
+        } else { clear_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "scroll") == 0) {
+        
         if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It scrolls the file according to the entered values.\nUsage: scroll <file_name>");
-        }
-        else{ scroll_file(command_pieces[1], atoi(command_pieces[2]));}
+            printf("It displays the file content page by page. The number of rows in a page should be specified by the user.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\n\n");
+            prompt();
+        } else { scroll_file(command_pieces[1], atoi(command_pieces[2])); }
 
     } else {
-        printf("Erroneous input! Type 'help' for list of commands.\n\n");
+        printf("Erroneous input!\n\n");
         prompt();
     }
 
