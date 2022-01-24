@@ -105,7 +105,7 @@ void run_command(char* command) {
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It moves the file.\nUsage: move <file_name> <destination_path>\n\n");
             prompt();
-        } else { delete_file(command_pieces[1]); }
+        } else { move_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "append") == 0) {
 
@@ -235,6 +235,8 @@ void copy_file(const char* file_name, const char* copied_file_name) {
         prompt();
     }
 
+    file = fopen(file_name, "r");
+
     // create copied file
     copy_file = fopen(copied_file_name, "w");
 
@@ -247,7 +249,7 @@ void copy_file(const char* file_name, const char* copied_file_name) {
     while ((ch = fgetc(file)) != EOF) { fputc(ch, copy_file); }
 
     fclose(file);
-    fclose(copy_file);
+    // fclose(copy_file);
 
     printf("File copied successfully!\n\n");
 
