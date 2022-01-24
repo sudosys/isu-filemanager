@@ -159,9 +159,7 @@ int does_file_exist(const char* file_name) {
 
 void create_file(const char* file_name) {
 
-    file = fopen(file_name, "r");
-
-    if (file != NULL) {
+    if (!does_file_exist(file_name)) {
         fprintf(stderr, "File already exists!\n\n");
         prompt();
     }
