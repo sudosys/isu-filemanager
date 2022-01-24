@@ -3,15 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_COMMAND_LENGTH 512
-#define MAX_TEXT_LENGTH 256
+// macros for maximum command and text length are defined
+#define MAX_COMMAND_LENGTH 256
+#define MAX_TEXT_LENGTH 512
 #define TRUE 1
 #define FALSE 0
 
+// global FILE*
 FILE* file;
 
 int main() {
 
+    // file manager initalized by calling the prompt
     prompt();
 
     return 0;
@@ -21,9 +24,11 @@ void prompt() {
 
     char command[MAX_COMMAND_LENGTH];
 
+    // command input taken here
     printf("ISU File Manager $> ");
     fgets(command, MAX_COMMAND_LENGTH, stdin);
 
+    // trailing new line character (\n) is truncated
     command[strcspn(command, "\n")] = 0;
 
     run_command(command);
@@ -32,10 +37,13 @@ void prompt() {
 
 void run_command(char* command) {
 
+    // given command is splitted by spaces using strtok from C STL
     char* token = strtok(command, " ");
     int command_index = 0;
+    // splitted command will be saved inside this const char array
     const char* command_pieces[3] = {NULL, NULL, NULL};
 
+    // command gets splitted here
     while (token != NULL) {
 
         command_pieces[command_index] = token;
@@ -45,6 +53,8 @@ void run_command(char* command) {
 
     }
 
+    // appropriate action taken according to the given command
+
     if (strcmp(command_pieces[0], "exit") == 0) { exit(EXIT_SUCCESS); }
 
     if (strcmp(command_pieces[0], "create") == 0) {
@@ -53,7 +63,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid create command.\ncreate /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0) {
-            printf("It creates the file.\nUsage: create <file_name>\n\n");
+            printf("It creates a file.\nUsage: create <file_name>\n\n");
             prompt();
         } else { create_file(command_pieces[1]); }
 
@@ -120,7 +130,7 @@ void run_command(char* command) {
     } else if (strcmp(command_pieces[0], "clear") == 0) {
 
         if (command_pieces[2] != NULL){
-            fprintf(stderr, "Invalid clear command.\n\n");
+            fprintf(stderr, "Invalid clear command.\nclear /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It deletes all the content in the file.\nUsage: clear <file_name>\n\n");
@@ -130,7 +140,7 @@ void run_command(char* command) {
     } else if (strcmp(command_pieces[0], "scroll") == 0) {
 
         if (command_pieces[2] == NULL){
-            fprintf(stderr, "Invalid scroll command.\n\n");
+            fprintf(stderr, "Invalid scroll command.\nscroll /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It displays the file content page by page. The number of rows in a page should be specified by the user.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\n\n");
@@ -159,11 +169,12 @@ int does_file_exist(const char* file_name) {
 
 void create_file(const char* file_name) {
 
-    if (!does_file_exist(file_name)) {
+    if (does_file_exist(file_name)) {
         fprintf(stderr, "File already exists!\n\n");
         prompt();
     }
 
+    // to create an empty file we open the given file_name in "w" mode
     file = fopen(file_name, "w");
 
     if (file != NULL) {
@@ -185,6 +196,7 @@ void delete_file(const char* file_name) {
         prompt();
     }
 
+    // remove function from C STL returns 0 on successful operation
     if (remove(file_name) == 0) {
         printf("File deleted successfully!\n\n");
     } else {
@@ -202,6 +214,7 @@ void rename_file(const char* old_file_name, const char* new_file_name) {
         prompt();
     }
 
+    // rename function from C STL returns 0 on successful operation
     if (rename(old_file_name, new_file_name) == 0) {
         printf("File renamed successfully!\n\n");
     } else {
@@ -217,13 +230,12 @@ void copy_file(const char* file_name, const char* copied_file_name) {
     char ch;
     FILE* copy_file;
 
-    file = fopen(file_name, "r");
-
-    if (file == NULL) {
+    if (!does_file_exist(file_name)) {
         fprintf(stderr, "File does not exist!\n\n");
         prompt();
     }
 
+    // create copied file
     copy_file = fopen(copied_file_name, "w");
 
     if (copy_file == NULL) {
@@ -231,9 +243,8 @@ void copy_file(const char* file_name, const char* copied_file_name) {
         prompt();
     }
 
-    while ((ch = fgetc(file)) != EOF) {
-        fputc(ch, copy_file);
-    }
+    // write source file contente character by character to copied file
+    while ((ch = fgetc(file)) != EOF) { fputc(ch, copy_file); }
 
     fclose(file);
     fclose(copy_file);
@@ -250,6 +261,7 @@ void move_file(const char* file_name, const char* destination) {
         prompt();
     }
 
+    // move command implemented using rename function from C STL
     if (rename(file_name, destination) == 0) {
         printf("File moved successfully!\n\n");
     } else {
@@ -262,13 +274,18 @@ void move_file(const char* file_name, const char* destination) {
 
 void append_file(const char* file_name) {
 
+    if (!does_file_exist(file_name)) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
+
     char text_to_append[MAX_TEXT_LENGTH];
     char* token;
 
     file = fopen(file_name, "a");
 
     if (file == NULL) {
-        fprintf(stderr, "File does not exist!\n\n");
+        fprintf(stderr, "File could not be opened for appending!\n\n");
         prompt();
     }
 
@@ -307,19 +324,19 @@ void insert_file(const char* file_name, int insertion_pos) {
     int pos_index = 0;
     int after_index = 0;
 
-    for (int i = 0; i < insertion_pos+1; i++) { text_before_insertion_pos[i] = '\0'; }
-    for (int i = 0; i < MAX_TEXT_LENGTH; i++) { text_after_insertion_pos[i] = '\0'; }
-
-    file = fopen(file_name, "r");
-
-    if (file == NULL) {
+    if (!does_file_exist(file_name)) {
         fprintf(stderr, "File does not exist!");
         prompt();
     }
 
+    // fill char arrays with "\0"
+    for (int i = 0; i < insertion_pos+1; i++) { text_before_insertion_pos[i] = '\0'; }
+    for (int i = 0; i < MAX_TEXT_LENGTH; i++) { text_after_insertion_pos[i] = '\0'; }
+
     printf("Enter the text to insert: ");
     fgets(text_to_insert, MAX_TEXT_LENGTH, stdin);
 
+    // truncate "\n" at the end of text_to_insert
     text_to_insert[strcspn(text_to_insert, "\n")] = 0;
 
     while (pos_index < insertion_pos) {
@@ -347,8 +364,11 @@ void insert_file(const char* file_name, int insertion_pos) {
         prompt();
     }
 
+    // write content before insertion to file
     fputs(text_before_insertion_pos, file);
+    // write inserted content to file
     fputs(text_to_insert, file);
+    // write content after insertion to file
     fputs(text_after_insertion_pos, file);
 
     fclose(file);
@@ -366,6 +386,7 @@ void clear_file(const char* file_name) {
         prompt();
     }
 
+    // file opened in "w" mode to clear the content of the file
     file = fopen(file_name, "w");
 
     if (file == NULL) {
@@ -396,6 +417,7 @@ void scroll_file(const char* file_name, int row_count){
             
         if(row_index == row_count){
             row_index = 0;
+            // getchar function is used to pause between pages
             getchar();
         }
 
