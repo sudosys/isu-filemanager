@@ -5,6 +5,8 @@
 
 #define MAX_COMMAND_LENGTH 512
 #define MAX_TEXT_LENGTH 256
+#define TRUE 1
+#define FALSE 0
 
 FILE* file;
 
@@ -24,15 +26,15 @@ void prompt() {
 
     command[strcspn(command, "\n")] = 0;
 
-    split_run_command(command);
+    run_command(command);
 
 }
 
-void split_run_command(char* command) {
+void run_command(char* command) {
 
     char* token = strtok(command, " ");
     int command_index = 0;
-    const char* command_pieces[3];
+    const char* command_pieces[3] = {NULL, NULL, NULL};
 
     while (token != NULL) {
 
@@ -47,114 +49,96 @@ void split_run_command(char* command) {
 
     if (strcmp(command_pieces[0], "create") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0) {
+        if (command_pieces[2] != NULL) {
+            fprintf(stderr, "Invalid create command.\ncreate /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0) {
             printf("It creates the file.\nUsage: create <file_name>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] != NULL){
-            fprintf(stderr, "Invalid create command.\n\n");
-            prompt();
-        }
-        else { create_file(command_pieces[1]); }
+        } else { create_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "delete") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] != NULL) {
+            fprintf(stderr, "Invalid delete command.\ndelete /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It deletes the file.\nUsage: delete <file_name>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] != NULL){
-            fprintf(stderr, "Invalid delete command.\n\n");
-            prompt();
-        }
-        else { delete_file(command_pieces[1]); }
+        } else { delete_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "rename") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] == NULL) {
+            fprintf(stderr, "Invalid rename command.\nrename /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It renames the file.\nUsage: rename <old_file_name> <new_file_name>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] == NULL){
-            fprintf(stderr, "Invalid rename command.\n\n");
-            prompt();
-        }
-        else { rename_file(command_pieces[1], command_pieces[2]); }
+        } else { rename_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "copy") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] == NULL) {
+            fprintf(stderr, "Invalid copy command.\ncopy /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It copies the file.\nUsage: copy <file_name> <copied_file_name (along with the directory if it going to be copied to somewhere else.)>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] == NULL){
-            fprintf(stderr, "Invalid copy command.\n\n");
-            prompt();
-        }
-        else { copy_file(command_pieces[1], command_pieces[2]); }
+        } else { copy_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "move") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] == NULL) {
+            fprintf(stderr, "Invalid move command.\nmove /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It moves the file.\nUsage: move <file_name> <destination_path>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] == NULL){
-            fprintf(stderr, "Invalid move command.\n\n");
-            prompt();
-        }
-        else { delete_file(command_pieces[1]); }
+        } else { delete_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "append") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] != NULL){
+            fprintf(stderr, "Invalid append command.\nappend /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It appends text into the file.\nUsage: append <file_name>\nAfter <enter> has pressed user should input the text that is going to be appended to the file.\n\n");
             prompt();
-        }
-        else if(command_pieces[2] != NULL){
-            fprintf(stderr, "Invalid append command.\n\n");
-            prompt();
-        }
-        else { append_file(command_pieces[1]); }
+        } else { append_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "insert") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
+        if (command_pieces[2] != NULL){
+            fprintf(stderr, "Invalid insert command.\ninsert /h for help.\n\n");
+            prompt();
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
             printf("It inserts the text into the file.\nUsage: insert <file_name> <which_point_to_insert (as number of characters starting from 1.)>\n\n");
             prompt();
-        }
-        else if(command_pieces[2] != NULL){
-            fprintf(stderr, "Invalid insert command.\n\n");
-            prompt();
-        }
-        else { insert_file(command_pieces[1], atoi(command_pieces[2])); }
+        } else { insert_file(command_pieces[1], atoi(command_pieces[2])); }
 
     } else if (strcmp(command_pieces[0], "clear") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It deletes all the content in the file.\nUsage: clear <file_name>\n\n");
-            prompt();
-        }
-        else if(command_pieces[2] != NULL){
+        if (command_pieces[2] != NULL){
             fprintf(stderr, "Invalid clear command.\n\n");
             prompt();
-        }
-        else { clear_file(command_pieces[1]); }
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It deletes all the content in the file.\nUsage: clear <file_name>\n\n");
+            prompt();
+        } else { clear_file(command_pieces[1]); }
 
     } else if (strcmp(command_pieces[0], "scroll") == 0) {
 
-        if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It displays the file content page by page. The number of rows in a page should be specified by the user.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\n\n");
-            prompt();
-        }
-        else if(command_pieces[2] == NULL){
+        if (command_pieces[2] == NULL){
             fprintf(stderr, "Invalid scroll command.\n\n");
             prompt();
-        }
-        else { scroll_file(command_pieces[1], atoi(command_pieces[2])); }
+        } else if (strcmp(command_pieces[1], "/h") == 0 ){
+            printf("It displays the file content page by page. The number of rows in a page should be specified by the user.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\n\n");
+            prompt();
+        } else { scroll_file(command_pieces[1], atoi(command_pieces[2])); }
 
     } else {
-        printf("Erroneous input!\n\n");
+        printf("Invalid input!\n\n");
         prompt();
     }
 
@@ -319,6 +303,7 @@ void insert_file(const char* file_name, int insertion_pos) {
         text_before_insertion_pos[pos_index] = ch;
 
         pos_index++;
+
     }
 
     while ((ch = fgetc(file)) != EOF) {
@@ -346,10 +331,27 @@ void insert_file(const char* file_name, int insertion_pos) {
 
     prompt();
 
+}
+
+int does_file_exist(const char* file_name) {
+
+    file = fopen(file_name, "r");
+
+    if (file != NULL) {
+        fclose(file);
+        return TRUE;
+    }
+
+    return FALSE;
 
 }
 
 void clear_file(const char* file_name) {
+
+    if (!does_file_exist(file_name)) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
 
     file = fopen(file_name, "w");
 
@@ -378,21 +380,19 @@ void scroll_file(const char* file_name, int row_count){
     }
 
     while(fgets (array, MAX_TEXT_LENGTH, file) !=NULL){
+            
             if(row_index==row_count){
                 row_index=0;
                 getchar();
             }
+
             printf("%s", array);
             row_index++;
     }
+    
     printf("\n");
     prompt();
 
     fclose(file);
 
 }
-
-
-
-
-

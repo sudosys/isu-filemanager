@@ -2,7 +2,7 @@
 #define ISUFILEMANAGER_H
 
 void prompt();
-void split_run_command(char* command);
+void run_command(char* command);
 void create_file(const char* file_name);
 void delete_file(const char* file_name);
 void rename_file(const char* old_file_name, const char* new_file_name);
