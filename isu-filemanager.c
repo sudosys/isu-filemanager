@@ -386,7 +386,7 @@ void scroll_file(const char* file_name, int row_count){
 
     int row_index = 0;
 
-    char array[MAX_TEXT_LENGTH];
+    char row[MAX_TEXT_LENGTH];
 
     file = fopen(file_name, "r");
 
@@ -394,16 +394,16 @@ void scroll_file(const char* file_name, int row_count){
         fprintf(stderr, "File does not exist!\n\n");
     }
 
-    while(fgets(array, MAX_TEXT_LENGTH, file) != NULL){
+    while(fgets(row, MAX_TEXT_LENGTH, file) != NULL){
             
         if(row_index == row_count){
             row_index = 0;
             getchar();
         }
 
-        printf("%s", array);
+        printf("%s", row);
         row_index++;
-        
+
     }
     
     printf("\n");
