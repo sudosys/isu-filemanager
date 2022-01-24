@@ -119,7 +119,7 @@ void run_command(char* command) {
 
     } else if (strcmp(command_pieces[0], "insert") == 0) {
 
-        if (command_pieces[2] != NULL){
+        if (command_pieces[2] == NULL){
             fprintf(stderr, "Invalid insert command.\ninsert /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
@@ -330,6 +330,8 @@ void insert_file(const char* file_name, int insertion_pos) {
         fprintf(stderr, "File does not exist!");
         prompt();
     }
+
+    file = fopen(file_name, "r");
 
     // fill char arrays with "\0"
     for (int i = 0; i < insertion_pos+1; i++) { text_before_insertion_pos[i] = '\0'; }
