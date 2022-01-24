@@ -79,17 +79,17 @@ void run_command(char* command) {
 
     } else if (strcmp(command_pieces[0], "rename") == 0) {
 
-        if (command_pieces[2] == NULL) {
+        if (command_pieces[2] == NULL && strcmp(command_pieces[1], "/h") != 0) {
             fprintf(stderr, "Invalid rename command.\nrename /h for help.\n\n");
             prompt();
-        } else if (strcmp(command_pieces[1], "/h") == 0 ){
+        } else if (strcmp(command_pieces[1], "/h") == 0){
             printf("It renames the file.\nUsage: rename <old_file_name> <new_file_name>\n\n");
             prompt();
         } else { rename_file(command_pieces[1], command_pieces[2]); }
 
     } else if (strcmp(command_pieces[0], "copy") == 0) {
 
-        if (command_pieces[2] == NULL) {
+        if (command_pieces[2] == NULL && strcmp(command_pieces[1], "/h") != 0) {
             fprintf(stderr, "Invalid copy command.\ncopy /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
@@ -99,7 +99,7 @@ void run_command(char* command) {
 
     } else if (strcmp(command_pieces[0], "move") == 0) {
 
-        if (command_pieces[2] == NULL) {
+        if (command_pieces[2] == NULL && strcmp(command_pieces[1], "/h") != 0) {
             fprintf(stderr, "Invalid move command.\nmove /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
@@ -119,7 +119,7 @@ void run_command(char* command) {
 
     } else if (strcmp(command_pieces[0], "insert") == 0) {
 
-        if (command_pieces[2] == NULL){
+        if (command_pieces[2] == NULL && strcmp(command_pieces[1], "/h") != 0){
             fprintf(stderr, "Invalid insert command.\ninsert /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
@@ -139,7 +139,7 @@ void run_command(char* command) {
 
     } else if (strcmp(command_pieces[0], "scroll") == 0) {
 
-        if (command_pieces[2] == NULL){
+        if (command_pieces[2] == NULL && strcmp(command_pieces[1], "/h") != 0){
             fprintf(stderr, "Invalid scroll command.\nscroll /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
