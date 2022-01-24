@@ -144,6 +144,19 @@ void run_command(char* command) {
 
 }
 
+int does_file_exist(const char* file_name) {
+
+    file = fopen(file_name, "r");
+
+    if (file != NULL) {
+        fclose(file);
+        return TRUE;
+    }
+
+    return FALSE;
+
+}
+
 void create_file(const char* file_name) {
 
     file = fopen(file_name, "r");
@@ -169,6 +182,11 @@ void create_file(const char* file_name) {
 
 void delete_file(const char* file_name) {
 
+    if (!does_file_exist(file_name)) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
+
     if (remove(file_name) == 0) {
         printf("File deleted successfully!\n\n");
     } else {
@@ -180,6 +198,11 @@ void delete_file(const char* file_name) {
 }
 
 void rename_file(const char* old_file_name, const char* new_file_name) {
+
+    if (!does_file_exist(old_file_name)) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
 
     if (rename(old_file_name, new_file_name) == 0) {
         printf("File renamed successfully!\n\n");
@@ -223,6 +246,11 @@ void copy_file(const char* file_name, const char* copied_file_name) {
 }
 
 void move_file(const char* file_name, const char* destination) {
+
+    if (!does_file_exist(file_name)) {
+        fprintf(stderr, "File does not exist!\n\n");
+        prompt();
+    }
 
     if (rename(file_name, destination) == 0) {
         printf("File moved successfully!\n\n");
@@ -287,7 +315,7 @@ void insert_file(const char* file_name, int insertion_pos) {
     file = fopen(file_name, "r");
 
     if (file == NULL) {
-        fprintf(stderr, "File could not be opened!");
+        fprintf(stderr, "File does not exist!");
         prompt();
     }
 
@@ -333,19 +361,6 @@ void insert_file(const char* file_name, int insertion_pos) {
 
 }
 
-int does_file_exist(const char* file_name) {
-
-    file = fopen(file_name, "r");
-
-    if (file != NULL) {
-        fclose(file);
-        return TRUE;
-    }
-
-    return FALSE;
-
-}
-
 void clear_file(const char* file_name) {
 
     if (!does_file_exist(file_name)) {
@@ -369,25 +384,26 @@ void clear_file(const char* file_name) {
 
 void scroll_file(const char* file_name, int row_count){
 
-    int row_index=0;
+    int row_index = 0;
 
     char array[MAX_TEXT_LENGTH];
 
     file = fopen(file_name, "r");
 
     if (file == NULL) {
-        fprintf(stderr, "Error occured while trying to scroll the content of the file!\n\n");
+        fprintf(stderr, "File does not exist!\n\n");
     }
 
-    while(fgets (array, MAX_TEXT_LENGTH, file) !=NULL){
+    while(fgets(array, MAX_TEXT_LENGTH, file) != NULL){
             
-            if(row_index==row_count){
-                row_index=0;
-                getchar();
-            }
+        if(row_index == row_count){
+            row_index = 0;
+            getchar();
+        }
 
-            printf("%s", array);
-            row_index++;
+        printf("%s", array);
+        row_index++;
+        
     }
     
     printf("\n");

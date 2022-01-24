@@ -3,6 +3,7 @@
 
 void prompt();
 void run_command(char* command);
+int does_file_exist(const char* file_name);
 void create_file(const char* file_name);
 void delete_file(const char* file_name);
 void rename_file(const char* old_file_name, const char* new_file_name);
