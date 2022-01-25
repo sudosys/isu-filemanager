@@ -123,7 +123,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid insert command.\ninsert /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It inserts the text into the file.\nUsage: insert <file_name> <which_point_to_insert (as number of characters starting from 1.)>\n\n");
+            printf("It inserts the text into the file.\nUsage: insert <file_name> <point_to_insert>\nInsertion point is number of characters starting from 1.\n\n");
             prompt();
         } else { insert_file(command_pieces[1], atoi(command_pieces[2])); }
 
@@ -143,7 +143,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid scroll command.\nscroll /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It displays the file content page by page.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\nThe number of rows in a page should be specified by the user. Press <enter> to view the next page.\n\n");
+            printf("It displays the file content page by page.\nUsage: scroll <file_name> <number_of_rows_per_page>\nThe number of rows in a page should be specified by the user. Press <enter> to view the next page.\n\n");
             prompt();
         } else { scroll_file(command_pieces[1], atoi(command_pieces[2])); }
 
