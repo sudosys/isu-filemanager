@@ -93,7 +93,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid copy command.\ncopy /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It copies the file.\nUsage: copy <file_name> <copied_file_name (along with the directory if it going to be copied to somewhere else.)>\n\n");
+            printf("It copies the file.\nUsage: copy <file_name> <copied_file_name>\nCopied file name can be written along with the directory if it is going to be copied to somewhere else.\n\n");
             prompt();
         } else { copy_file(command_pieces[1], command_pieces[2]); }
 
@@ -143,7 +143,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid scroll command.\nscroll /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It displays the file content page by page. The number of rows in a page should be specified by the user.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\n\n");
+            printf("It displays the file content page by page.\nUsage: scroll <file_name> <number_of_rows_in_a_page>\nThe number of rows in a page should be specified by the user. Press <enter> to view the next page.\n\n");
             prompt();
         } else { scroll_file(command_pieces[1], atoi(command_pieces[2])); }
 
