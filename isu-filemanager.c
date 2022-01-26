@@ -414,6 +414,7 @@ void scroll_file(const char* file_name, int row_count){
 
     if (!does_file_exist(file_name)) {
         fprintf(stderr, "File does not exist!\n\n");
+        prompt();
     }
     
     file = fopen(file_name, "r");
