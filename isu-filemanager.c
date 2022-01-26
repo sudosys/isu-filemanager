@@ -406,7 +406,7 @@ void clear_file(const char* file_name) {
 
 }
 
-void scroll_file(const char* file_name, int row_count){
+void scroll_file(const char* file_name, int row_count) {
 
     int row_index = 0;
 
