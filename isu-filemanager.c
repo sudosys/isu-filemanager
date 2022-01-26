@@ -328,7 +328,7 @@ void insert_file(const char* file_name, int insertion_pos) {
     int after_index = 0;
 
     if (!does_file_exist(file_name)) {
-        fprintf(stderr, "File does not exist!");
+        fprintf(stderr, "File does not exist!\n\n");
         prompt();
     }
 
