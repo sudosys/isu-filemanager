@@ -18,6 +18,7 @@ int main() {
     prompt();
 
     return 0;
+
 }
 
 void prompt() {
@@ -249,7 +250,7 @@ void copy_file(const char* file_name, const char* copied_file_name) {
     while ((ch = fgetc(file)) != EOF) { fputc(ch, copy_file); }
 
     fclose(file);
-    // fclose(copy_file);
+    fclose(copy_file);
 
     printf("File copied successfully!\n\n");
 
@@ -399,9 +400,9 @@ void clear_file(const char* file_name) {
         printf("File content cleared successfully!\n\n");
     }
 
-    prompt();
-
     fclose(file);
+
+    prompt();
 
 }
 
@@ -411,11 +412,11 @@ void scroll_file(const char* file_name, int row_count){
 
     char row[MAX_TEXT_LENGTH];
 
-    file = fopen(file_name, "r");
-
-    if (file == NULL) {
+    if (!does_file_exist(file_name)) {
         fprintf(stderr, "File does not exist!\n\n");
     }
+    
+    file = fopen(file_name, "r");
 
     while(fgets(row, MAX_TEXT_LENGTH, file) != NULL){
             
@@ -429,10 +430,10 @@ void scroll_file(const char* file_name, int row_count){
         row_index++;
 
     }
-    
-    printf("\n");
-    prompt();
 
     fclose(file);
+
+    printf("\n");
+    prompt();
 
 }
