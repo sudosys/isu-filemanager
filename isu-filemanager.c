@@ -124,7 +124,7 @@ void run_command(char* command) {
             fprintf(stderr, "Invalid insert command.\ninsert /h for help.\n\n");
             prompt();
         } else if (strcmp(command_pieces[1], "/h") == 0 ){
-            printf("It inserts the text into the file.\nUsage: insert <file_name> <point_to_insert>\nInsertion point is number of characters starting from 1.\n\n");
+            printf("It inserts the text into the file.\nUsage: insert <file_name> <point_to_insert>\nInsertion point is number of characters starting from 0.\n\n");
             prompt();
         } else { insert_file(command_pieces[1], atoi(command_pieces[2])); }
 
